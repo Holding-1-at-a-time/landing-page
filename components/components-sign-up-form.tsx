@@ -26,8 +26,13 @@ interface SignUpFormData {
 }
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import * as z from 'zod'
 import { api } from '../convex/_generated/api'
+import { Id } from "@/convex/_generated/dataModel"
+
+interface SignUpFormProps {
+  onClose: () => void
+  selectedPlan?: 'starter' | 'enterprise' | 'pro'
+}
 
 const signUpSchema = v.object({
   _id: v.id('signup'),
@@ -59,6 +64,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
 
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
+      const plan = data.plan === 'pro' ? 'starter' : data.plan;
       await createUser({
         name: data.name,
         email: data.email,
@@ -66,12 +72,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         businessSize: data.businessSize,
         industry: data.industry,
         mainChallenge: data.mainChallenge,
-        plan: data.plan,
-        _id: data._id,
-        userId: data.userId,
+        plan: plan,
+        _id: data._id as Id<'signup'>,
+        userId: data.userId as Id<'users'>,
         createdAt: 0,
-        agreeTerms: false
+        agreeTerms: false,
       })
+      // ...
       toast.success('Sign up successful! Welcome to DetailSync.')
       onClose()
     } catch (error) {

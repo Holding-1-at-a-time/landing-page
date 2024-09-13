@@ -826,9 +826,9 @@ export function LandingPageComponent() {
                           {feature.details.map((detail, i) => (
                             <p
                               key={detail}
-                              className="text-sm text-gray-300 flex items-center"
+                              className="text-sm text-gray-800 flex items-center"
                             >
-                              <Check className="w-4 h-4 mr-2 text-[#00AE98]" />
+                              <Check className="w-4 h-4 mr-2 text-[#2fd6c0]" />
                               {detail}
                             </p>
                           ))}
@@ -862,7 +862,7 @@ export function LandingPageComponent() {
                   onCheckedChange={setIsAnnualBilling}
                 />
                 <span
-                  className={`ml-2 ${isAnnualBilling ? "text-[#00AE98]" : "text-gray-400"}`}
+                  className={`ml-2 ${isAnnualBilling ? "text-gray-200" : "text-gray-100"}`}
                 >
                   Annual (Save 20%)
                 </span>
@@ -871,7 +871,7 @@ export function LandingPageComponent() {
                 {pricingTiers.map((tier) => (
                   <Card
                     key={tier.name}
-                    className="bg-[rgba(136,245,203,0.3)] backdrop-blur-[20px] border-[rgba(255,255,255,0.18)] rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]"
+                    className="bg-[rgba(136,245,203,0.3)] backdrop-blur-[10px] border-[rgba(255,255,255,0.88)] rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]"
                   >
                     <CardHeader>
                       <CardTitle className="text-2xl font-bold">
@@ -942,7 +942,7 @@ export function LandingPageComponent() {
           </section>
         </main>
 
-        <footer className="bg-gray-800 py-8">
+        <footer className="bg-gray-600 py-8">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="flex items-center mb-4 md:mb-0">
@@ -964,7 +964,7 @@ export function LandingPageComponent() {
                 </Link>
               </div>
             </div>
-            <div className="mt-4 text-center text-sm text-gray-400">
+            <div className="mt-4 text-center text-sm text-gray-800">
               © {new Date().getFullYear()} DetailSync. All rights reserved.
             </div>
           </div>
