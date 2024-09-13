@@ -1,31 +1,47 @@
 'use client'
 
-import React from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { useMutation } from 'convex/react'
-import { api } from '../convex/_generated/api'
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { toast } from 'react-toastify'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from 'convex/react'
+import React from 'react'
+import { v } from 'convex/values';
 
-const signUpSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  companyName: z.string().min(2, 'Company name must be at least 2 characters'),
-  businessSize: z.enum(['solo', 'small', 'medium', 'large']),
-  industry: z.string().min(2, 'Industry must be at least 2 characters'),
-  mainChallenge: z.enum(['scheduling', 'customer', 'analytics', 'growth']),
-  plan: z.enum(['starter', 'pro', 'enterprise']),
-  agreeTerms: z.boolean().refine(val => val === true, 'You must agree to the terms and conditions')
+interface SignUpFormData {
+  _id: string;
+  userId: string;
+  createdAt: number;
+  name: string;
+  email: string;
+  companyName: string;
+  businessSize: 'solo' | 'small' | 'medium' | 'large';
+  address: string;
+  mainChallenge: 'scheduling' | 'customer' | 'analytics' | 'growth';
+  plan: 'starter' | 'pro' | 'enterprise';
+  industry: string;
+  agreeTerms: boolean;
+}
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import * as z from 'zod'
+import { api } from '../convex/_generated/api'
+
+const signUpSchema = v.object({
+  _id: v.id('signup'),
+  userId: v.id('users'),
+  createdAt: v.number(),
+  name: v.string(),
+  email: v.string(),
+  companyName: v.string(),
+  businessSize: v.union(v.literal('solo'), v.literal('small'), v.literal('medium'), v.literal('large')),
+  address: v.string(),
+  mainChallenge: v.union(v.literal('scheduling'), v.literal('customer'), v.literal('analytics'), v.literal('growth')),
+  plan: v.union(v.literal('starter'), v.literal('enterprise')),
 })
 
-type SignUpFormData = z.infer<typeof signUpSchema>
 
 interface SignUpFormProps {
   onClose: () => void
@@ -34,9 +50,8 @@ interface SignUpFormProps {
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
     defaultValues: {
-      plan: selectedPlan as 'starter' | 'pro' | 'enterprise' | undefined
+      plan: selectedPlan as 'starter' | 'pro' | 'enterprise'
     }
   })
 
@@ -52,6 +67,10 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         industry: data.industry,
         mainChallenge: data.mainChallenge,
         plan: data.plan,
+        _id: data._id,
+        userId: data.userId,
+        createdAt: 0,
+        agreeTerms: false
       })
       toast.success('Sign up successful! Welcome to DetailSync.')
       onClose()
