@@ -4,7 +4,6 @@ import { v } from "convex/values";
 
 export default defineSchema({
     signUp: defineTable({
-        _id: v.id('signup'),
         userId: v.id('users'),
         createdAt: v.number(),
         name: v.string(),
@@ -23,8 +22,6 @@ export default defineSchema({
         .index("by_name_email_createdAt_name_businessSize_companyName", ["name", "email", "createdAt", "name", "businessSize", "companyName"]),
 
     users: defineTable({
-        _id: v.id('users'),
-        userId: v.id('users'),
         createdAt: v.number(),
         name: v.string(),
         email: v.string(),
@@ -36,7 +33,6 @@ export default defineSchema({
         agreeTerms: v.boolean(),
     })
     
-        .index("by_userId", ["userId"])
     
         .index("by_name_email_createdAt_name", ["name", "email", "createdAt", "name"])
         .index("by_name_email_createdAt_name_businessSize", ["name", "email", "createdAt", "name", "businessSize"])

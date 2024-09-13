@@ -33,7 +33,7 @@ import { Id } from "@/convex/_generated/dataModel"
 
 interface SignUpFormProps {
   onClose: () => void
-  selectedPlan?: 'starter' | 'pro' | 'enterprise' | undefined
+  selectedPlan?: 'starter' | 'pro' | 'enterprise'
 }
 const signUpSchema = v.object({
   _id: v.id('signup'),
@@ -47,12 +47,6 @@ const signUpSchema = v.object({
   mainChallenge: v.union(v.literal('scheduling'), v.literal('customer'), v.literal('analytics'), v.literal('growth')),
   plan: v.union(v.literal('starter'), v.literal('pro'), v.literal('enterprise')),
 })
-
-
-interface SignUpFormProps {
-  onClose: () => void
-  selectedPlan?: 'starter' | 'pro' | 'enterprise' | undefined
-}
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
@@ -74,7 +68,6 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         industry: data.industry,
         mainChallenge: data.mainChallenge,
         plan: plan,
-        _id: data._id as Id<'signup'>,
         userId: data.userId as Id<'users'>,
         createdAt: 0,
         agreeTerms: false,
