@@ -73,7 +73,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         industry: data.industry,
         mainChallenge: data.mainChallenge,
         plan: plan,
-        _id: data._id as Id<'signup'>,
+        _id: data._id as Id<'signups'>,
         userId: data.userId as Id<'users'>,
         createdAt: 0,
         agreeTerms: false,
