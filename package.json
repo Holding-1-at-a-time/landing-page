@@ -46,6 +46,7 @@
     "react-toastify": "^10.0.5",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-animated": "^1.1.2",
     "three": "^0.168.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",

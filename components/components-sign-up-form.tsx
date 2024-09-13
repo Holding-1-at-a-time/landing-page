@@ -10,6 +10,8 @@ import { useMutation } from 'convex/react'
 import React from 'react'
 import { v } from 'convex/values';
 
+type PlanType = 'starter' | 'pro' | 'enterprise';
+
 interface SignUpFormData {
   _id: string;
   userId: string;
@@ -20,7 +22,7 @@ interface SignUpFormData {
   businessSize: 'solo' | 'small' | 'medium' | 'large';
   address: string;
   mainChallenge: 'scheduling' | 'customer' | 'analytics' | 'growth';
-  plan: 'starter' | 'pro' | 'enterprise';
+  plan: PlanType;
   industry: string;
   agreeTerms: boolean;
 }
@@ -31,9 +33,8 @@ import { Id } from "@/convex/_generated/dataModel"
 
 interface SignUpFormProps {
   onClose: () => void
-  selectedPlan?: 'starter' | 'enterprise' | 'pro'
+  selectedPlan?: 'starter' | 'pro' | 'enterprise' | undefined
 }
-
 const signUpSchema = v.object({
   _id: v.id('signup'),
   userId: v.id('users'),
@@ -44,13 +45,13 @@ const signUpSchema = v.object({
   businessSize: v.union(v.literal('solo'), v.literal('small'), v.literal('medium'), v.literal('large')),
   address: v.string(),
   mainChallenge: v.union(v.literal('scheduling'), v.literal('customer'), v.literal('analytics'), v.literal('growth')),
-  plan: v.union(v.literal('starter'), v.literal('enterprise')),
+  plan: v.union(v.literal('starter'), v.literal('pro'), v.literal('enterprise')),
 })
 
 
 interface SignUpFormProps {
   onClose: () => void
-  selectedPlan?: string
+  selectedPlan?: 'starter' | 'pro' | 'enterprise' | undefined
 }
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan }) => {
@@ -73,7 +74,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         industry: data.industry,
         mainChallenge: data.mainChallenge,
         plan: plan,
-        _id: data._id as Id<'signups'>,
+        _id: data._id as Id<'signup'>,
         userId: data.userId as Id<'users'>,
         createdAt: 0,
         agreeTerms: false,
@@ -98,11 +99,6 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" {...register('email')} />
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-      </div>
-      <div>
-        <Label htmlFor="password">Password</Label>
-        <Input id="password" type="password" {...register('password')} />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
       <div>
         <Label htmlFor="companyName">Company Name</Label>
