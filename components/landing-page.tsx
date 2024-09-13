@@ -82,25 +82,16 @@ interface PricingTier {
   features: string[];
 }
 
-// Form schema
-const signUpSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  companyName: z.string().min(2, "Company name must be at least 2 characters"),
-  businessSize: z.enum(["solo", "small", "medium", "large"]),
-  address: z.string().min(2, "Industry must be at least 2 characters"),
-  mainChallenge: z.enum(["scheduling", "customer", "analytics", "growth"]),
-  plan: z.enum(["starter", "pro", "enterprise"]),
-  agreeTerms: z
-    .boolean()
-    .refine(
-      (val) => val === true,
-      "You must agree to the terms and conditions"
-    ),
-});
-
-type SignUpFormData = z.infer<typeof signUpSchema>;
+interface SignUpFormData {
+  name: string;
+  email: string;
+  companyName: string;
+  businessSize: string;
+  address: string;
+  mainChallenge: string;
+  plan: "starter" | "pro" | "enterprise";
+  agreeTerms: boolean;
+}
 
 const saveToConvex = async (
   data: SignUpFormData
@@ -383,15 +374,14 @@ const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: string }> = ({
   selectedPlan,
 }) => {
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      plan: selectedPlan as "starter" | "pro" | "enterprise" | undefined,
-    },
-  });
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm<SignUpFormData>({
+  defaultValues: {
+    plan: selectedPlan as 'starter' | 'pro' | 'enterprise' | undefined,
+  },
+});
 
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
