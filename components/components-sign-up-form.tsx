@@ -1,14 +1,16 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from 'convex/react'
 import React from 'react'
 import { v } from 'convex/values';
+import { api } from "@/convex/_generated/api";
+import { Id, toast } from "react-toastify";
 
 type PlanType = 'starter' | 'pro' | 'enterprise';
 
@@ -26,30 +28,16 @@ interface SignUpFormData {
   industry: string;
   agreeTerms: boolean;
 }
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
-import { api } from '../convex/_generated/api'
-import { Id } from "@/convex/_generated/dataModel"
 
 interface SignUpFormProps {
   onClose: () => void
   selectedPlan?: 'starter' | 'pro' | 'enterprise'
 }
-const signUpSchema = v.object({
-  _id: v.id('signup'),
-  userId: v.id('users'),
-  createdAt: v.number(),
-  name: v.string(),
-  email: v.string(),
-  companyName: v.string(),
-  businessSize: v.union(v.literal('solo'), v.literal('small'), v.literal('medium'), v.literal('large')),
-  address: v.string(),
-  mainChallenge: v.union(v.literal('scheduling'), v.literal('customer'), v.literal('analytics'), v.literal('growth')),
-  plan: v.union(v.literal('starter'), v.literal('pro'), v.literal('enterprise')),
-})
 
-export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
+const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: 'starter' | 'pro' | 'enterprise' | undefined }> = ({
+  onClose,
+  selectedPlan,
+}) => {  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
     defaultValues: {
       plan: selectedPlan as 'starter' | 'pro' | 'enterprise'
     }
@@ -68,7 +56,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onClose, selectedPlan })
         industry: data.industry,
         mainChallenge: data.mainChallenge,
         plan: plan,
-        userId: data.userId as Id<'users'>,
+        userId: data.userId as Id,
         createdAt: 0,
         agreeTerms: false,
       })
