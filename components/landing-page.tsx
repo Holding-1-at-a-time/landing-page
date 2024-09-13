@@ -263,7 +263,7 @@ const SocialProof: React.FC = () => {
           {savings.toFixed(1)}hrs
         </div>
         <br></br>
-          <div className="text-sm text-gray-300">Avg. Weekly Time Saved</div>
+        <div className="text-sm text-gray-300">Avg. Weekly Time Saved</div>
       </div>
     </div>
   );
@@ -272,7 +272,7 @@ const SocialProof: React.FC = () => {
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: uuidv4(),
@@ -374,14 +374,14 @@ const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: string }> = ({
   selectedPlan,
 }) => {
   const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm<SignUpFormData>({
-  defaultValues: {
-    plan: selectedPlan as 'starter' | 'pro' | 'enterprise' | undefined,
-  },
-});
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    defaultValues: {
+      plan: selectedPlan as 'starter' | 'pro' | 'enterprise' | undefined,
+    },
+  });
 
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
@@ -446,7 +446,7 @@ const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: string }> = ({
       <div>
         <Label htmlFor="address">Address</Label>
         <Input id="address" {...register("address")} />
-        {errors.industry && (
+        {errors.address && (
           <p className="text-red-500 text-sm">{errors.address.message}</p>
         )}
       </div>
@@ -708,23 +708,39 @@ export function LandingPageComponent() {
             <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
 
             <div className="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-screen">
-              <motion.h1
+              <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300"
+                style={{
+                  fontSize: '5xl',
+                  fontWeight: 'extrabold',
+                  textAlign: 'center',
+                  marginBottom: '6',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  backgroundImage: 'linear-gradient(to right, white, gray-300)',
+                }}
               >
                 Revolutionize Your Detailing Business
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-xl sm:text-2xl text-center mb-8 max-w-2xl"
+              </motion.div>
+              Revolutionize Your Detailing Business
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                style={{
+                  fontSize: '5xl',
+                  fontWeight: 'extrabold',
+                  textAlign: 'center',
+                  marginBottom: '6',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  backgroundImage: 'linear-gradient(to right, white, gray-300)',
+                }}
               >
-                AI-Powered Scheduling for the Modern Detailer
-              </motion.p>
+                Revolutionize Your Detailing Business
+              </motion.div>
 
               {!personalization ? (
                 <motion.div
@@ -739,7 +755,11 @@ export function LandingPageComponent() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
-                  className="text-center space-y-6"
+                  variants={{
+                    textCenter: {
+                      textAlign: 'center',
+                    },
+                  }}
                 >
                   <h2 className="text-2xl font-bold">
                     Perfect for {personalization.businessSize} detailers facing{" "}
@@ -760,14 +780,14 @@ export function LandingPageComponent() {
                 </motion.div>
               )}
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="mt-12"
-              >
-                <InteractiveDemo />
-              </motion.div>
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.6 }}
+  style={{ marginTop: 12 }}
+>
+  <InteractiveDemo />
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -978,7 +998,7 @@ export function LandingPageComponent() {
         </Dialog>
 
         <ToastContainer position="bottom-right" />
-      </div>
+      </div >
     </>
   );
 }

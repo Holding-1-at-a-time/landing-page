@@ -13,6 +13,7 @@ export const createUser = mutation({
         industry: v.string(),
         mainChallenge: v.union(v.literal("scheduling"), v.literal("customer"), v.literal("analytics"), v.literal("growth")),
         plan: v.union(v.literal("starter"), v.literal("enterprise")),
+        address: v.string(), // Add this line
     },
     handler: async (ctx, args) => {
         const userId = await ctx.db.insert("users", args);
@@ -35,7 +36,6 @@ export const getUserById = query({
     handler: async (ctx, args) => {
         return await ctx.db
             .query("users")
-            .withIndex("by_userId", (q) => q.eq("userId", args.userId))
             .first();
     },
 });
@@ -56,8 +56,7 @@ export const updateUser = mutation({
         agreeTerms: v.boolean(),
     },
     handler: async (ctx, args) => {
-        await ctx.db
+        ctx.db
             .query("users")
-            .withIndex("by_userId", (q) => q.eq("userId", args.userId))
     },
 });

@@ -7,13 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useMutation } from 'convex/react'
+import { Id } from "../convex/_generated/dataModel";
 import React from 'react'
-import { v } from 'convex/values';
 import { api } from "@/convex/_generated/api";
-import { Id, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 type PlanType = 'starter' | 'pro' | 'enterprise';
-
 interface SignUpFormData {
   _id: string;
   userId: string;
@@ -29,15 +28,11 @@ interface SignUpFormData {
   agreeTerms: boolean;
 }
 
-interface SignUpFormProps {
-  onClose: () => void
-  selectedPlan?: 'starter' | 'pro' | 'enterprise'
-}
-
 const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: 'starter' | 'pro' | 'enterprise' | undefined }> = ({
   onClose,
   selectedPlan,
-}) => {  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
+}) => {
+  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
     defaultValues: {
       plan: selectedPlan as 'starter' | 'pro' | 'enterprise'
     }
@@ -45,10 +40,19 @@ const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: 'starter' | 'pr
 
   const createUser = useMutation(api.users.createUser)
 
+  interface SignUpFormProps {
+    onClose: () => void
+    selectedPlan?: 'starter' | 'pro' | 'enterprise'
+  }
+
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
+      if (!data.name || !data.email || !data.companyName || !data.businessSize || !data.industry || !data.mainChallenge || !data.plan) {
+        throw new Error('One or more required fields are missing');
+      }
+
       const plan = data.plan === 'pro' ? 'starter' : data.plan;
-      await createUser({
+      const result = await createUser({
         name: data.name,
         email: data.email,
         companyName: data.companyName,
@@ -56,13 +60,18 @@ const SignUpForm: React.FC<{ onClose: () => void; selectedPlan?: 'starter' | 'pr
         industry: data.industry,
         mainChallenge: data.mainChallenge,
         plan: plan,
-        userId: data.userId as Id,
-        createdAt: 0,
+        createdAt: Date.now(),
         agreeTerms: false,
+        address: "",
+        userId: "" as Id<"users">,
+        _id: "" as Id<"signup">
       })
-      // ...
-      toast.success('Sign up successful! Welcome to DetailSync.')
-      onClose()
+      if (result) {
+        toast.success('Sign up successful! Welcome to DetailSync.')
+        onClose()
+      } else {
+        throw new Error('Sign up failed');
+      }
     } catch (error) {
       console.error('Sign up error:', error)
       toast.error('An unexpected error occurred. Please try again later.')
